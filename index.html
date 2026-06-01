@@ -885,115 +885,56 @@
       .lp-prog-fill { transition: none !important; }
     }
 
-    /* ─── MOBILE TOPBAR ─────────────────────────── */
-    .mobile-topbar {
-      display: none;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 16px;
-      background: var(--sidebar-bg);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .mobile-logo {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: -0.3px;
-      flex: 1;
-    }
-    .mobile-logo span { color: var(--accent); }
-
-    /* Hamburger button */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 6px;
-      border-radius: 6px;
-      flex-shrink: 0;
-      transition: background 0.15s ease;
-    }
-    .hamburger:hover { background: var(--elevated); }
-    .hamburger span {
-      display: block;
-      width: 18px;
-      height: 2px;
-      background: var(--text-sub);
-      border-radius: 99px;
-      transition: background 0.2s ease;
-    }
-    .hamburger:hover span { background: var(--text); }
-
-    /* Sidebar overlay backdrop */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 99;
-      cursor: pointer;
-    }
-    .sidebar-overlay.visible { display: block; }
-
     /* ─── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 767px) {
-      body {
-        flex-direction: column;
-        overflow-y: auto;
-        height: auto;
-        min-height: 100svh;
-      }
-      .mobile-topbar { display: flex; }
+      body { overflow-y: auto; height: auto; min-height: 100svh; }
+
       .hamburger { display: flex; }
 
-      /* Sidebar: fixed overlay, slides in from left */
-      .sidebar {
+      /* Nav becomes fixed dropdown below topbar */
+      .nav {
         position: fixed;
-        top: 0;
-        left: -260px;
-        height: 100vh;
-        width: 260px;
-        min-width: 260px;
-        z-index: 100;
-        transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-                    box-shadow 0.25s ease;
-      }
-      .sidebar.open {
+        top: 52px;
         left: 0;
-        box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        background: var(--sidebar-bg);
+        border-bottom: 1px solid var(--border);
+        padding: 8px 0 12px;
+        z-index: 51;
+        transform: translateY(-8px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+                    opacity 0.22s ease;
+      }
+      .nav.open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .nav-indicator { display: none; }
+      button.nav-item {
+        height: auto;
+        padding: 12px 24px;
+        width: 100%;
+      }
+      button.nav-item.active {
+        color: var(--accent);
+        background: var(--accent-dim);
       }
 
-      /* Main: full width, normal scroll */
-      .main {
-        flex: 1;
-        padding: 20px 16px;
-        overflow-y: visible;
-      }
+      .main { padding: 20px 16px; }
       .section { max-width: 100%; }
       .section-title { font-size: 20px; }
       .section-desc { max-width: 100%; }
 
-      /* Grids collapse */
       .grid-2 { grid-template-columns: 1fr; }
       .grid-3 { grid-template-columns: 1fr 1fr; }
       .stat-cards { grid-template-columns: repeat(2, 1fr); }
-
-      /* Form row wraps */
       .form-row { flex-wrap: wrap; }
-
-      /* LP week footer stacks vertically */
-      .lp-week-foot {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-      }
+      .lp-week-foot { flex-direction: column !important; align-items: flex-start !important; }
     }
 
     @media (max-width: 480px) {
