@@ -76,7 +76,7 @@
     }
 
     .sidebar-header {
-      padding: 28px 20px 20px;
+      padding: 28px 24px 22px;
       border-bottom: 1px solid var(--border);
       position: relative;
       z-index: 1;
@@ -93,30 +93,31 @@
     .sidebar-header .subtitle {
       font-size: 10px;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 5px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       font-family: 'Space Mono', monospace;
     }
 
-    .nav { flex: 1; padding: 12px 0; position: relative; z-index: 1; }
+    .nav { flex: 1; padding: 10px 0; position: relative; z-index: 1; }
     .nav-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 9px 18px 9px 20px;
+      gap: 12px;
+      padding: 11px 20px 11px 24px;
       cursor: pointer;
-      color: var(--text-muted);
-      font-size: 13px;
+      color: var(--text-sub);
+      font-size: 14px;
       font-weight: 500;
       transition: color 0.18s ease, background 0.18s ease;
       border-left: 2px solid transparent;
       user-select: none;
       position: relative;
+      letter-spacing: 0.1px;
     }
     .nav-item:hover {
-      color: var(--text-sub);
-      background: linear-gradient(90deg, rgba(129,140,248,0.04) 0%, transparent 100%);
+      color: var(--text);
+      background: linear-gradient(90deg, rgba(129,140,248,0.05) 0%, transparent 100%);
     }
     .nav-item.active {
       color: var(--text);
@@ -125,7 +126,7 @@
     }
     .nav-item.active .icon { filter: none; }
     .nav-item .icon {
-      font-size: 14px;
+      font-size: 15px;
       width: 18px;
       text-align: center;
       flex-shrink: 0;
@@ -133,16 +134,8 @@
     }
     .nav-item:hover .icon { transform: scale(1.15); }
 
-    .sidebar-footer {
-      padding: 14px 20px;
-      border-top: 1px solid var(--border);
-      font-size: 10px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      font-family: 'Space Mono', monospace;
-      position: relative;
-      z-index: 1;
-    }
+    /* Footer removed — was dead weight */
+    .sidebar-footer { display: none; }
 
     /* ─── MAIN ──────────────────────────────────── */
     .main { flex: 1; overflow-y: auto; padding: 36px 40px; }
