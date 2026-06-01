@@ -950,50 +950,41 @@
 </head>
 <body>
 
-<!-- MOBILE TOPBAR (hidden on desktop) -->
-<div class="mobile-topbar">
-  <button class="hamburger" onclick="openSidebar()" aria-label="Open navigation" aria-expanded="false" id="hamburger-btn">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-  <span class="mobile-logo">My <span>Edge</span></span>
-</div>
-
-<!-- SIDEBAR OVERLAY BACKDROP -->
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-header">
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
     <div class="logo">My <span>Edge</span></div>
-    <div class="subtitle">AI &amp; Skills Hub</div>
+    <nav class="nav" id="main-nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-indicator" id="nav-indicator"></div>
+      <button class="nav-item active" data-section="usp" onclick="showSection('usp')" aria-current="page">
+        <span class="icon">🎯</span> My Edge
+      </button>
+      <button class="nav-item" data-section="n8n" onclick="showSection('n8n')">
+        <span class="icon">⚡</span> n8n
+      </button>
+      <button class="nav-item" data-section="portfolio" onclick="showSection('portfolio')">
+        <span class="icon">🛠️</span> Portfolio
+      </button>
+      <button class="nav-item" data-section="interview" onclick="showSection('interview')">
+        <span class="icon">💬</span> Interview
+      </button>
+      <button class="nav-item" data-section="insights" onclick="showSection('insights')">
+        <span class="icon">💡</span> Insights
+      </button>
+      <button class="nav-item" data-section="plan" onclick="showSection('plan')">
+        <span class="icon">📅</span> 6-Week Plan
+      </button>
+    </nav>
+    <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Open navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
-  <nav class="nav" role="navigation" aria-label="Main navigation">
-    <button class="nav-item active" onclick="showSection('usp', this)" aria-current="page">
-      <span class="icon">🎯</span> My Unique Edge
-    </button>
-    <button class="nav-item" onclick="showSection('n8n', this)">
-      <span class="icon">⚡</span> n8n Learning
-    </button>
-    <button class="nav-item" onclick="showSection('portfolio', this)">
-      <span class="icon">🛠️</span> AI Portfolio
-    </button>
-    <button class="nav-item" onclick="showSection('interview', this)">
-      <span class="icon">💬</span> Interview Prep
-    </button>
-    <button class="nav-item" onclick="showSection('insights', this)">
-      <span class="icon">💡</span> Elana's Insights
-    </button>
-    <button class="nav-item" onclick="showSection('plan', this)">
-      <span class="icon">📅</span> 6-Week Plan
-    </button>
-  </nav>
-  <div class="sidebar-footer">
-    Based on your call with<br>
-    Elana Shama · May 31, 2026
-  </div>
-</div>
+</header>
+
+<!-- MOBILE NAV BACKDROP -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeMobileNav()"></div>
 
 <!-- MAIN -->
 <div class="main">
