@@ -783,6 +783,200 @@
     #section-plan .card[style*="border-left:4px solid"] p {
       color: var(--text-sub) !important;
     }
+
+    /* ─── BUTTON RESET for nav-item ────────────── */
+    button.nav-item {
+      all: unset;
+      display: flex;
+      width: 100%;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    /* ─── FOCUS VISIBLE ─────────────────────────── */
+    .check-item input[type="checkbox"]:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px var(--accent-dim);
+    }
+    .lp-task input[type=checkbox]:focus-visible {
+      outline: 2px solid var(--accent) !important;
+      outline-offset: 2px !important;
+      box-shadow: 0 0 0 4px var(--accent-dim) !important;
+    }
+    .btn:focus-visible,
+    .btn-icon:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px var(--accent-dim);
+    }
+    .nav-item:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+      color: var(--text);
+      background: linear-gradient(90deg, var(--accent-dim) 0%, transparent 80%);
+    }
+    .gap-header:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    .resource-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-color: var(--accent);
+    }
+    .lp-tool:focus-visible {
+      outline: 2px solid var(--accent) !important;
+      outline-offset: 2px !important;
+      color: var(--accent) !important;
+    }
+    select:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-color: var(--accent);
+    }
+    .hamburger:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ─── REDUCED MOTION ────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .section { animation: none !important; }
+      .add-form { animation: none !important; }
+      .gap-body.open { animation: none !important; }
+      .btn-primary:hover { transform: none !important; box-shadow: none !important; }
+      .insight-card:hover { transform: none !important; box-shadow: none !important; }
+      .resource-link:hover { transform: none !important; }
+      .workflow-item:hover { transform: none !important; }
+      .nav-item:hover .icon { transform: none !important; }
+      .progress-fill { transition: none !important; }
+      .lp-prog-fill { transition: none !important; }
+    }
+
+    /* ─── MOBILE TOPBAR ─────────────────────────── */
+    .mobile-topbar {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .mobile-logo {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+      flex: 1;
+    }
+    .mobile-logo span { color: var(--accent); }
+
+    /* Hamburger button */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      transition: background 0.15s ease;
+    }
+    .hamburger:hover { background: var(--elevated); }
+    .hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: var(--text-sub);
+      border-radius: 99px;
+      transition: background 0.2s ease;
+    }
+    .hamburger:hover span { background: var(--text); }
+
+    /* Sidebar overlay backdrop */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 99;
+      cursor: pointer;
+    }
+    .sidebar-overlay.visible { display: block; }
+
+    /* ─── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 767px) {
+      body {
+        flex-direction: column;
+        overflow-y: auto;
+        height: auto;
+        min-height: 100svh;
+      }
+      .mobile-topbar { display: flex; }
+      .hamburger { display: flex; }
+
+      /* Sidebar: fixed overlay, slides in from left */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -240px;
+        height: 100vh;
+        width: 240px;
+        min-width: 240px;
+        z-index: 100;
+        transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                    box-shadow 0.25s ease;
+      }
+      .sidebar.open {
+        left: 0;
+        box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Main: full width, normal scroll */
+      .main {
+        flex: 1;
+        padding: 20px 16px;
+        overflow-y: visible;
+      }
+      .section { max-width: 100%; }
+      .section-title { font-size: 20px; }
+      .section-desc { max-width: 100%; }
+
+      /* Grids collapse */
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .stat-cards { grid-template-columns: repeat(2, 1fr); }
+
+      /* Form row wraps */
+      .form-row { flex-wrap: wrap; }
+
+      /* LP week footer stacks vertically */
+      .lp-week-foot {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .stat-cards { grid-template-columns: 1fr; }
+      .main { padding: 16px 12px; }
+      .section-title { font-size: 18px; }
+    }
   </style>
 </head>
 <body>
