@@ -1535,12 +1535,43 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
 </div>
 
 <script>
+  // MOBILE SIDEBAR
+  function openSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const btn = document.getElementById('hamburger-btn');
+    sidebar.classList.add('open');
+    overlay.classList.add('visible');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const btn = document.getElementById('hamburger-btn');
+    sidebar.classList.remove('open');
+    overlay.classList.remove('visible');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeSidebar();
+  });
+
   // NAV
   function showSection(id, el) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.remove('active');
+      n.removeAttribute('aria-current');
+    });
     document.getElementById('section-' + id).classList.add('active');
     el.classList.add('active');
+    el.setAttribute('aria-current', 'page');
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth <= 767) closeSidebar();
   }
 
   // PERSISTENCE
