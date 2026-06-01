@@ -1495,43 +1495,70 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
 </div>
 
 <script>
-  // MOBILE SIDEBAR
-  function openSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    const btn = document.getElementById('hamburger-btn');
-    sidebar.classList.add('open');
-    overlay.classList.add('visible');
-    btn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+  // ── FROSTED GLASS ON SCROLL ─────────────────────
+  document.querySelector('.main').addEventListener('scroll', function() {
+    document.getElementById('topbar').classList.toggle('scrolled', this.scrollTop > 10);
+  });
+
+  // ── SLIDING NAV INDICATOR ────────────────────────
+  function moveIndicator(id) {
+    const nav = document.getElementById('main-nav');
+    const indicator = document.getElementById('nav-indicator');
+    if (!nav || !indicator || window.innerWidth <= 767) return;
+    const target = nav.querySelector('[data-section="' + id + '"]');
+    if (!target) return;
+    const navRect = nav.getBoundingClientRect();
+    const itemRect = target.getBoundingClientRect();
+    indicator.style.left = (itemRect.left - navRect.left) + 'px';
+    indicator.style.width = itemRect.width + 'px';
+    indicator.classList.add('ready');
   }
 
-  function closeSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
+  window.addEventListener('resize', function() {
+    const active = document.querySelector('.nav-item.active');
+    if (active && active.dataset.section) moveIndicator(active.dataset.section);
+  });
+
+  // ── MOBILE NAV ───────────────────────────────────
+  function toggleMobileNav() {
+    const nav = document.getElementById('main-nav');
     const btn = document.getElementById('hamburger-btn');
-    sidebar.classList.remove('open');
+    const overlay = document.getElementById('mobile-nav-overlay');
+    const isOpen = nav.classList.contains('open');
+    nav.classList.toggle('open', !isOpen);
+    overlay.classList.toggle('visible', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    btn.setAttribute('aria-expanded', String(!isOpen));
+    document.body.style.overflow = isOpen ? '' : 'hidden';
+  }
+
+  function closeMobileNav() {
+    const nav = document.getElementById('main-nav');
+    const btn = document.getElementById('hamburger-btn');
+    const overlay = document.getElementById('mobile-nav-overlay');
+    nav.classList.remove('open');
     overlay.classList.remove('visible');
+    btn.classList.remove('open');
     btn.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeSidebar();
+    if (e.key === 'Escape') closeMobileNav();
   });
 
-  // NAV
-  function showSection(id, el) {
+  // ── NAV ──────────────────────────────────────────
+  function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => {
-      n.classList.remove('active');
-      n.removeAttribute('aria-current');
+      const match = n.dataset.section === id;
+      n.classList.toggle('active', match);
+      if (match) n.setAttribute('aria-current', 'page');
+      else n.removeAttribute('aria-current');
     });
     document.getElementById('section-' + id).classList.add('active');
-    el.classList.add('active');
-    el.setAttribute('aria-current', 'page');
-    // Close sidebar on mobile after navigation
-    if (window.innerWidth <= 767) closeSidebar();
+    moveIndicator(id);
+    closeMobileNav();
   }
 
   // PERSISTENCE
