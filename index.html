@@ -1788,6 +1788,13 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
 
   // INIT
   loadAll();
+
+  // Init nav indicator after layout settles
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      moveIndicator('usp');
+    });
+  });
 </script>
 </body>
 </html>
