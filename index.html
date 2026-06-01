@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Edge — AI Skills Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* Signal palette */
+      --page:        #0D0D10;
+      --sidebar-bg:  #0A0A0D;
+      --card:        #17171C;
+      --elevated:    #1E1E24;
+      --hover:       #22222A;
+
+      --accent:      #818CF8;
+      --accent-dim:  rgba(129,140,248,0.12);
+      --accent-glow: rgba(129,140,248,0.35);
+      --accent-deep: #4F46E5;
+
+      --done:        #34D399;
+      --done-dim:    rgba(52,211,153,0.12);
+      --done-glow:   rgba(52,211,153,0.3);
+
+      --warn:        #FBBF24;
+      --warn-dim:    rgba(251,191,36,0.12);
+      --danger:      #F87171;
+      --danger-dim:  rgba(248,113,113,0.12);
+
+      --text:        #F1F1F4;
+      --text-sub:    #A1A1AA;
+      --text-muted:  #52525B;
+      --border:      #2A2A32;
+      --border-hi:   #3A3A45;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      display: flex;
+      height: 100vh;
+      background: var(--page);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* ─── SCROLLBAR ─────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* ─── SIDEBAR ───────────────────────────────── */
+    .sidebar {
+      width: 224px;
+      min-width: 224px;
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    /* subtle noise texture on sidebar */
+    .sidebar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    .sidebar-header {
+      padding: 28px 20px 20px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+    .sidebar-header .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .sidebar-header .logo span {
+      color: var(--accent);
+    }
+    .sidebar-header .subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .nav { flex: 1; padding: 12px 0; position: relative; z-index: 1; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 18px 9px 20px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.18s ease, background 0.18s ease;
+      border-left: 2px solid transparent;
+      user-select: none;
+      position: relative;
+    }
+    .nav-item:hover {
+      color: var(--text-sub);
+      background: linear-gradient(90deg, rgba(129,140,248,0.04) 0%, transparent 100%);
+    }
+    .nav-item.active {
+      color: var(--text);
+      border-left-color: var(--accent);
+      background: linear-gradient(90deg, var(--accent-dim) 0%, transparent 80%);
+    }
+    .nav-item.active .icon { filter: none; }
+    .nav-item .icon {
+      font-size: 14px;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+    .nav-item:hover .icon { transform: scale(1.15); }
+
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-family: 'Space Mono', monospace;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── MAIN ──────────────────────────────────── */
+    .main { flex: 1; overflow-y: auto; padding: 36px 40px; }
+    .section { display: none; max-width: 900px; animation: fadeUp 0.22s ease; }
+    .section.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header { margin-bottom: 28px; }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 6px;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+    .section-desc strong { color: var(--text); font-weight: 600; }
+
+    /* ─── CARDS ─────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s ease;
+    }
+    .card:hover { border-color: var(--border-hi); }
+
+    .card-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      font-family: 'Space Mono', monospace;
+    }
+    .card-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      display: block;
+      line-height: 1.5;
+    }
+
+    /* ─── GRID ──────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* ─── INPUTS ────────────────────────────────── */
+    textarea, input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 13px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      background: var(--elevated);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      line-height: 1.5;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    textarea:focus, input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim), 0 0 16px var(--accent-glow);
+    }
+    textarea::placeholder, input[type="text"]::placeholder { color: var(--text-muted); }
+
+    select {
+      padding: 9px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 13px;
+      color: var(--text);
+      background: var(--elevated);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+    select:focus { border-color: var(--accent); }
+
+    /* ─── USP BOX ───────────────────────────────── */
+    .usp-box {
+      background: var(--card);
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 24px rgba(129,140,248,0.08), inset 0 0 32px rgba(129,140,248,0.03);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .usp-box::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(129,140,248,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .usp-box .label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-family: 'Space Mono', monospace;
+    }
+    .usp-box textarea {
+      background: rgba(14,14,16,0.6);
+      border-color: var(--border-hi);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      min-height: 70px;
+    }
+    .usp-box textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+    .usp-box textarea::placeholder { color: var(--text-muted); font-weight: 400; }
+
+    /* ─── PROGRESS ──────────────────────────────── */
+    .progress-wrap { margin-bottom: 6px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .progress-label { font-size: 13px; font-weight: 500; color: var(--text-sub); }
+    .progress-pct {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Space Mono', monospace;
+    }
+    .progress-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: visible;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    /* ─── CHECKLIST ─────────────────────────────── */
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.15s ease;
+      border-radius: 4px;
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-item:hover { background: rgba(255,255,255,0.02); }
+
+    /* Custom checkbox */
+    .check-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--border-hi);
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 1px;
+      flex-shrink: 0;
+      background: var(--elevated);
+      transition: all 0.18s ease;
+      position: relative;
+    }
+    .check-item input[type="checkbox"]:checked {
+      background: var(--done);
+      border-color: var(--done);
+      box-shadow: 0 0 8px var(--done-glow);
+    }
+    .check-item input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 5px;
+      height: 9px;
+      border: 2px solid #0D0D10;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+
+    .check-item label { font-size: 13px; color: var(--text-sub); cursor: pointer; line-height: 1.4; }
+    .check-item .sub { font-size: 11px; color: var(--text-muted); display: block; margin-top: 3px; }
+    .check-item.done label { color: var(--text-muted); text-decoration: line-through; }
+
+    /* ─── WORKFLOW ITEMS ────────────────────────── */
+    .workflow-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      background: var(--elevated);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      border: 1px solid var(--border);
+      transition: border-color 0.18s ease, transform 0.15s ease;
+    }
+    .workflow-item:hover {
+      border-color: var(--border-hi);
+      transform: translateX(2px);
+    }
+    .workflow-item .wf-name { flex: 1; font-size: 13px; }
+    .workflow-item .wf-name strong { display: block; font-weight: 600; color: var(--text); }
+    .workflow-item .wf-name span { font-size: 11px; color: var(--text-muted); }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      font-family: 'Space Mono', monospace;
+    }
+    .tag-n8n    { background: rgba(251,191,36,0.12);  color: #FBBF24; }
+    .tag-claude { background: var(--accent-dim);       color: var(--accent); }
+    .tag-make   { background: rgba(96,165,250,0.12);   color: #60A5FA; }
+    .tag-zapier { background: rgba(248,113,113,0.12);  color: #F87171; }
+    .tag-other  { background: rgba(161,161,170,0.1);   color: var(--text-muted); }
+
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .status-done { background: var(--done);  box-shadow: 0 0 6px var(--done-glow); }
+    .status-wip  { background: var(--warn);  box-shadow: 0 0 6px rgba(251,191,36,0.4); }
+    .status-idea { background: var(--text-muted); }
+
+    /* ─── BUTTONS ───────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.2px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0D0D10;
+    }
+    .btn-primary:hover {
+      background: #A5B4FC;
+      box-shadow: 0 0 16px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover {
+      background: var(--elevated);
+      color: var(--text);
+      border-color: var(--border-hi);
+    }
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 7px;
+      font-size: 13px;
+      border-radius: 5px;
+      transition: all 0.15s ease;
+    }
+    .btn-icon:hover { color: var(--danger); background: var(--danger-dim); }
+
+    /* ─── ADD FORM ──────────────────────────────── */
+    .add-form {
+      background: var(--elevated);
+      border: 1px dashed var(--border-hi);
+      border-radius: 9px;
+      padding: 16px;
+      margin-bottom: 12px;
+      animation: fadeUp 0.18s ease;
+    }
+    .form-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+
+    /* ─── STAT CARDS ────────────────────────────── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .stat-card {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      text-align: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 18px var(--accent-dim);
+    }
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      font-family: 'Space Mono', monospace;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ─── GAP ANSWERS ───────────────────────────── */
+    .gap-section {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      transition: border-color 0.2s ease;
+    }
+    .gap-section:hover { border-color: var(--border-hi); }
+    .gap-header {
+      padding: 13px 16px;
+      background: var(--card);
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background 0.15s ease;
+    }
+    .gap-header:hover { background: var(--elevated); }
+    .gap-title { font-size: 13px; font-weight: 500; color: var(--text-sub); }
+    .gap-toggle {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.5px;
+    }
+    .gap-body { padding: 16px; display: none; background: var(--elevated); }
+    .gap-body.open { display: block; animation: fadeUp 0.18s ease; }
+    .gap-template {
+      background: rgba(129,140,248,0.06);
+      border: 1px solid var(--accent-dim);
+      border-left: 3px solid var(--accent);
+      border-radius: 7px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.7;
+    }
+    .gap-template strong { color: var(--accent); font-weight: 600; }
+
+    /* ─── INSIGHTS ──────────────────────────────── */
+    .insight-card {
+      background: var(--card);
+      border-radius: 9px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      margin-bottom: 8px;
+      transition: border-color 0.2s ease, transform 0.18s ease, box-shadow 0.2s ease;
+    }
+    .insight-card:hover {
+      border-color: var(--accent);
+      border-left-color: var(--accent);
+      transform: translateX(3px);
+      box-shadow: -4px 0 20px rgba(129,140,248,0.1);
+    }
+    .insight-card .ins-num {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+      font-family: 'Space Mono', monospace;
+    }
+    .insight-card .ins-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .insight-card .ins-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 6px;
+      line-height: 1.65;
+    }
+
+    /* ─── RESOURCES ─────────────────────────────── */
+    .resource-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: var(--elevated);
+      border-radius: 8px;
+      margin-bottom: 6px;
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.18s ease, transform 0.15s ease;
+    }
+    .resource-link:hover {
+      border-color: var(--accent);
+      transform: translateX(3px);
+    }
+    .resource-link .r-icon { font-size: 17px; flex-shrink: 0; }
+    .resource-link .r-name { font-size: 13px; font-weight: 600; display: block; color: var(--text); }
+    .resource-link .r-desc { font-size: 11px; color: var(--text-muted); display: block; margin-top: 1px; }
+
+    /* ─── BADGE ─────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      background: rgba(251,191,36,0.15);
+      color: var(--warn);
+      margin-left: 6px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    /* ─── EMPTY STATE ───────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .empty-state .empty-icon { font-size: 26px; margin-bottom: 10px; opacity: 0.5; }
+
+    /* ─── 6-WEEK PLAN (inline override) ─────────── */
+    .lp-week-card {
+      background: var(--card) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 10px !important;
+      margin-bottom: 12px !important;
+      overflow: hidden !important;
+      transition: border-color 0.2s ease !important;
+    }
+    .lp-week-card:hover { border-color: var(--border-hi) !important; }
+    .lp-week-card.lp-current {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 24px rgba(129,140,248,0.1) !important;
+    }
+    .lp-week-head {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      padding: 13px 16px !important;
+      background: var(--elevated) !important;
+      border-bottom: 1px solid var(--border) !important;
+    }
+    .lp-week-card.lp-current .lp-week-head {
+      background: linear-gradient(90deg, rgba(129,140,248,0.08) 0%, var(--elevated) 100%) !important;
+    }
+    .lp-wnum {
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 1px !important;
+      color: var(--text-muted) !important;
+      flex-shrink: 0 !important;
+      font-family: 'Space Mono', monospace !important;
+    }
+    .lp-week-card.lp-current .lp-wnum { color: var(--accent) !important; }
+    .lp-wtitle {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: var(--text) !important;
+      flex: 1 !important;
+    }
+    .lp-cbadge {
+      display: none !important;
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      background: var(--accent) !important;
+      color: #0D0D10 !important;
+      padding: 2px 9px !important;
+      border-radius: 99px !important;
+      letter-spacing: 0.3px !important;
+      text-transform: uppercase !important;
+      flex-shrink: 0 !important;
+      font-family: 'Space Mono', monospace !important;
+    }
+    .lp-week-body { padding: 14px 16px !important; }
+    .lp-project-desc {
+      font-size: 12px !important;
+      color: var(--text-sub) !important;
+      line-height: 1.65 !important;
+      margin-bottom: 14px !important;
+      border-left: 2px solid var(--border-hi) !important;
+      padding-left: 12px !important;
+    }
+    .lp-week-card.lp-current .lp-project-desc { border-left-color: var(--accent) !important; }
+    .lp-task {
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 9px !important;
+      padding: 7px 0 !important;
+      border-bottom: 1px solid var(--border) !important;
+      cursor: pointer !important;
+    }
+    .lp-task:last-of-type { border-bottom: none !important; }
+    .lp-task input[type=checkbox] {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      width: 14px !important;
+      height: 14px !important;
+      border: 1.5px solid var(--border-hi) !important;
+      border-radius: 3px !important;
+      cursor: pointer !important;
+      flex-shrink: 0 !important;
+      margin-top: 2px !important;
+      background: var(--elevated) !important;
+      transition: all 0.18s ease !important;
+      position: relative !important;
+    }
+    .lp-task input[type=checkbox]:checked {
+      background: var(--done) !important;
+      border-color: var(--done) !important;
+      box-shadow: 0 0 7px var(--done-glow) !important;
+    }
+    .lp-task input[type=checkbox]:checked::after {
+      content: '' !important;
+      position: absolute !important;
+      left: 3px !important;
+      top: 0px !important;
+      width: 5px !important;
+      height: 8px !important;
+      border: 2px solid #0D0D10 !important;
+      border-top: none !important;
+      border-left: none !important;
+      transform: rotate(45deg) !important;
+    }
+    .lp-task label {
+      font-size: 12px !important;
+      color: var(--text-sub) !important;
+      cursor: pointer !important;
+      line-height: 1.45 !important;
+    }
+    .lp-task.lp-done label { text-decoration: line-through !important; color: var(--text-muted) !important; }
+    .lp-week-foot {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      padding: 10px 0 0 !important;
+      margin-top: 10px !important;
+      border-top: 1px solid var(--border) !important;
+    }
+    .lp-tools { display: flex !important; flex-wrap: wrap !important; gap: 6px !important; }
+    .lp-tool {
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      padding: 3px 9px !important;
+      border-radius: 5px !important;
+      background: var(--elevated) !important;
+      color: var(--text-muted) !important;
+      text-decoration: none !important;
+      border: 1px solid var(--border) !important;
+      transition: all 0.15s ease !important;
+      font-family: 'Space Mono', monospace !important;
+    }
+    .lp-tool:hover { border-color: var(--accent) !important; color: var(--accent) !important; }
+    .lp-artifact { font-size: 11px !important; color: var(--done) !important; font-weight: 500 !important; }
+    .lp-cost {
+      font-size: 11px !important;
+      color: var(--text-muted) !important;
+      font-family: 'Space Mono', monospace !important;
+    }
+    .lp-prog-bar {
+      height: 3px !important;
+      background: var(--border) !important;
+      border-radius: 99px !important;
+      overflow: visible !important;
+      margin-top: 10px !important;
+    }
+    .lp-prog-fill {
+      height: 100% !important;
+      background: var(--accent) !important;
+      border-radius: 99px !important;
+      transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      box-shadow: 0 0 10px var(--accent-glow) !important;
+    }
+
+    /* ─── MISC INLINE OVERRIDES ─────────────────── */
+    /* USP final card in 6-week plan */
+    #section-plan .card[style*="border-left:4px solid"] {
+      border-left: 3px solid var(--done) !important;
+      box-shadow: 0 0 20px var(--done-dim) !important;
+    }
+    #section-plan .card[style*="border-left:4px solid"] p {
+      color: var(--text-sub) !important;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">My <span>Edge</span></div>
+    <div class="subtitle">AI &amp; Skills Hub</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-item active" onclick="showSection('usp', this)">
+      <span class="icon">🎯</span> My Unique Edge
+    </div>
+    <div class="nav-item" onclick="showSection('n8n', this)">
+      <span class="icon">⚡</span> n8n Learning
+    </div>
+    <div class="nav-item" onclick="showSection('portfolio', this)">
+      <span class="icon">🛠️</span> AI Portfolio
+    </div>
+    <div class="nav-item" onclick="showSection('interview', this)">
+      <span class="icon">💬</span> Interview Prep
+    </div>
+    <div class="nav-item" onclick="showSection('insights', this)">
+      <span class="icon">💡</span> Elana's Insights
+    </div>
+    <div class="nav-item" onclick="showSection('plan', this)">
+      <span class="icon">📅</span> 6-Week Plan
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    Based on your call with<br>
+    Elana Shama · May 31, 2026
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ① MY UNIQUE EDGE -->
+  <div class="section active" id="section-usp">
+    <div class="section-header">
+      <div class="section-title">My Unique Edge</div>
+      <div class="section-desc">The one thing that makes you different from every other MOPs candidate with HubSpot experience. This anchors your CV, your pitch, and every interview answer.</div>
+    </div>
+
+    <div class="usp-box">
+      <div class="label">🎯 My Unique Selling Point</div>
+      <textarea id="usp-main" placeholder="Write your USP — 1-2 sentences. What do you have that the average 4-year HubSpot MOPs person doesn't?
+
+Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architecture with AI-powered automation — built under the most restrictive tool environments in the industry (enterprise cybersecurity), which means I know how to get things done when there are no shortcuts." oninput="save('usp-main')"></textarea>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">What makes me different</div>
+        <span class="card-label">The background no one else has</span>
+        <textarea id="usp-diff" placeholder="e.g. I operated MOPs at an enterprise security company under strict AI/tool restrictions — no Zapier, no open APIs, no Claude integrations. That forced creative problem-solving within HubSpot alone. Most MOPs people never face that constraint." oninput="save('usp-diff')" style="min-height:110px"></textarea>
+      </div>
+      <div class="card">
+        <div class="card-title">My angle on AI / GTM Engineering</div>
+        <span class="card-label">What I'm building toward</span>
+        <textarea id="usp-angle" placeholder="e.g. I'm positioning at the intersection of MOPs and GTM Engineering — not just managing the stack, but designing AI workflows that eliminate repetitive GTM tasks. n8n + HubSpot + Claude is the stack I'm building mastery in." oninput="save('usp-angle')" style="min-height:110px"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">My 30-second pitch</div>
+      <span class="card-label">Lead with who you are → anchor on your edge → close with where you're headed and why this role fits</span>
+      <textarea id="usp-pitch" placeholder="Write your pitch here. This is what you say when they ask 'tell me about yourself.' Make it specific — no generic sentences." oninput="save('usp-pitch')" style="min-height:130px"></textarea>
+    </div>
+  </div>
+
+  <!-- ② N8N LEARNING -->
+  <div class="section" id="section-n8n">
+    <div class="section-header">
+      <div class="section-title">n8n Learning</div>
+      <div class="section-desc">Elana was direct: Claude is "easy" (prompt-based). n8n requires API connections and shows strategic + technical mindset. That's what hiring managers get excited about. <strong>This is your differentiator to build.</strong></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Skill Progress</div>
+      <div class="progress-wrap">
+        <div class="progress-header">
+          <span class="progress-label">n8n Level</span>
+          <span class="progress-pct" id="n8n-pct">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="n8n-bar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Skills Checklist</div>
+        <div id="n8n-checklist">
+          <div class="check-item" onclick="toggleCheck(this,'n8n1')">
+            <input type="checkbox" id="n8n1" onchange="updateProgress()">
+            <label for="n8n1">Created free n8n account<span class="sub">Get started at n8n.io — free cloud tier available</span></label>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this,'n8n2')">
+            <input type="checkbox" id="n8n2" onchange="updateProgress()">
+            <label for="n8n2">Completed first workflow<span class="sub">Any automation, even a simple trigger → action</span></label>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this,'n8n3')">
+            <input type="checkbox" id="n8n3" onchange="updateProgress()">
+            <label for="n8n3">Connected an external API<span class="sub">Free service — Airtable, Notion, GitHub, etc.</span></label>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this,'n8n4')">
+            <input type="checkbox" id="n8n4" onchange="updateProgress()">
+            <label for="n8n4">Built an AI-powered workflow<span class="sub">Integrate Claude or OpenAI node into a flow</span></label>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this,'n8n5')">
+            <input type="checkbox" id="n8n5" onchange="updateProgress()">
+            <label for="n8n5">Built a GTM-relevant workflow<span class="sub">Something tied to leads, enrichment, CRM, or outreach</span></label>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this,'n8n6')">
+            <input type="checkbox" id="n8n6" onchange="updateProgress()">
+            <label for="n8n6">Have 3+ workflows I can show<span class="sub">Portfolio-ready — can walk through the logic</span></label>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this,'n8n7')">
+            <input type="checkbox" id="n8n7" onchange="updateProgress()">
+            <label for="n8n7">Can explain a workflow confidently in an interview<span class="sub">Walk through what it does, why I built it, what it solves</span></label>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this,'n8n8')">
+            <input type="checkbox" id="n8n8" onchange="updateProgress()">
+            <label for="n8n8">Added n8n/AI work to my CV<span class="sub">Concrete project with a real-world outcome or use case</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-title">Learning Resources</div>
+          <a class="resource-link" href="https://www.youtube.com/@n8nandme" target="_blank">
+            <span class="r-icon">▶️</span>
+            <span>
+              <span class="r-name">n8n and Me <span class="badge">Elana's pick</span></span>
+              <span class="r-desc">Free account tutorials — exactly what she recommended</span>
+            </span>
+          </a>
+          <a class="resource-link" href="https://docs.n8n.io" target="_blank">
+            <span class="r-icon">📄</span>
+            <span>
+              <span class="r-name">n8n Official Docs</span>
+              <span class="r-desc">Node reference, API connections, workflow templates</span>
+            </span>
+          </a>
+          <a class="resource-link" href="https://n8n.io/workflows/" target="_blank">
+            <span class="r-icon">🔄</span>
+            <span>
+              <span class="r-name">n8n Workflow Templates</span>
+              <span class="r-desc">Browse real-world automations for inspiration</span>
+            </span>
+          </a>
+          <a class="resource-link" href="https://community.n8n.io" target="_blank">
+            <span class="r-icon">💬</span>
+            <span>
+              <span class="r-name">n8n Community Forum</span>
+              <span class="r-desc">Get unstuck fast — very active community</span>
+            </span>
+          </a>
+        </div>
+        <div class="card">
+          <div class="card-title">Ideas &amp; Notes</div>
+          <textarea id="n8n-notes" placeholder="Workflow ideas, things to try, questions to explore..." oninput="save('n8n-notes')" style="min-height:80px"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ AI PORTFOLIO -->
+  <div class="section" id="section-portfolio">
+    <div class="section-header">
+      <div class="section-title">AI Portfolio</div>
+      <div class="section-desc">Log every automation and AI project you build — personal projects count. This is your evidence when interviewers ask about AI experience.</div>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-total">0</div>
+        <div class="stat-label">Total Projects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-done">0</div>
+        <div class="stat-label">Completed</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="stat-wip">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px">
+        <div class="card-title" style="margin-bottom:0">My Projects</div>
+        <button class="btn btn-primary" onclick="toggleAddForm()">+ Add Project</button>
+      </div>
+
+      <div class="add-form" id="add-form" style="display:none">
+        <div class="form-row">
+          <input type="text" id="new-name" placeholder="Project name" style="flex:2" onkeydown="if(event.key==='Enter')addWorkflow()">
+          <select id="new-tool">
+            <option value="n8n">n8n</option>
+            <option value="claude">Claude</option>
+            <option value="make">Make</option>
+            <option value="zapier">Zapier</option>
+            <option value="other">Other</option>
+          </select>
+          <select id="new-status">
+            <option value="wip">In Progress</option>
+            <option value="done">Completed</option>
+            <option value="idea">Idea</option>
+          </select>
+        </div>
+        <input type="text" id="new-desc" placeholder="What does it do? (one sentence)" style="margin-bottom:10px" onkeydown="if(event.key==='Enter')addWorkflow()">
+        <button class="btn btn-primary" onclick="addWorkflow()" style="margin-right:8px">Add</button>
+        <button class="btn btn-ghost" onclick="toggleAddForm()">Cancel</button>
+      </div>
+
+      <div id="workflow-list">
+        <div class="empty-state">
+          <div class="empty-icon">🛠️</div>
+          No projects yet — add your first one above.<br>
+          <span style="font-size:11px; margin-top:4px; display:block">Personal projects count. Start small.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ INTERVIEW PREP -->
+  <div class="section" id="section-interview">
+    <div class="section-header">
+      <div class="section-title">Interview Prep</div>
+      <div class="section-desc">Elana: it's not just what you've done — it's communicating what you're capable of and where you're headed. Build your answers here.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Vision Pitch — "What would you do in this role?"</div>
+      <span class="card-label">Directly addresses the "creativity" feedback you received. Come in with a concrete plan, not just past experience.</span>
+      <textarea id="interview-vision" placeholder="Example angle:
+'In the first 30 days, I'd audit the current stack and identify 2-3 high-friction areas where AI automation could replace manual work. My immediate focus would be an n8n workflow that [specific thing relevant to the role]. Based on what I built at Cognyte — where I couldn't use most tools — I know the biggest wins usually sit in...'" oninput="save('interview-vision')" style="min-height:150px"></textarea>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <div class="card-title">Gap Answer Scripts</div>
+
+      <div class="gap-section">
+        <div class="gap-header" onclick="toggleGap(this)">
+          <span class="gap-title">❓ "You don't have hands-on AI experience professionally."</span>
+          <span class="gap-toggle">▼ expand</span>
+        </div>
+        <div class="gap-body">
+          <div class="gap-template">
+            <strong>Framework (Elana's approach):</strong> "That's fair — at my last company, a cybersecurity firm, we had strict tool restrictions that blocked most AI integrations. That said, I haven't let that stop me building. [What you've built personally]. More importantly, [transferable skill] maps directly to what you need here. And here's exactly how I'd approach [X] on day one..."
+          </div>
+          <span class="card-label">Your personal answer</span>
+          <textarea id="gap-ai" placeholder="Write your version here. Name the Cognyte constraint specifically. Name what you've actually built (Claude workflows, Cowork automations, n8n). Close with a concrete vision of what you'd do in this role." oninput="save('gap-ai')" style="min-height:100px"></textarea>
+        </div>
+      </div>
+
+      <div class="gap-section">
+        <div class="gap-header" onclick="toggleGap(this)">
+          <span class="gap-title">❓ "You haven't used n8n / GTM engineering tools."</span>
+          <span class="gap-toggle">▼ expand</span>
+        </div>
+        <div class="gap-body">
+          <div class="gap-template">
+            <strong>Framework:</strong> "I'm actively building that right now — I've already [what you've done in n8n]. The logic of connecting APIs, building trigger-action workflows — it's identical to what I've done in HubSpot workflows and [Make/Zapier]. The syntax is different. The strategic thinking isn't."
+          </div>
+          <span class="card-label">Your personal answer — update this as your n8n experience grows</span>
+          <textarea id="gap-n8n" placeholder="Draft your answer here. Be specific about what you've built." oninput="save('gap-n8n')" style="min-height:100px"></textarea>
+        </div>
+      </div>
+
+      <div class="gap-section">
+        <div class="gap-header" onclick="toggleGap(this)">
+          <span class="gap-title">❓ "We need someone with 5+ years / more seniority."</span>
+          <span class="gap-toggle">▼ expand</span>
+        </div>
+        <div class="gap-body">
+          <div class="gap-template">
+            <strong>Framework:</strong> "I owned the entire marketing technology stack at an enterprise cybersecurity company — that's not junior scope. The real question is whether I've operated at the level you need, and I have: [specific example]. I got that role when I thought I was reaching for it — and I delivered. That's exactly how I think about this one."
+          </div>
+          <span class="card-label">Your personal answer — anchor on Cognyte specifics</span>
+          <textarea id="gap-senior" placeholder="Be specific: team size, stack complexity, what you owned, what you built. The more concrete, the more convincing." oninput="save('gap-senior')" style="min-height:100px"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Other prep notes</div>
+      <textarea id="interview-other" placeholder="Questions to ask them, companies to research, anything else on your mind..." oninput="save('interview-other')" style="min-height:80px"></textarea>
+    </div>
+  </div>
+
+  <!-- ⑤ ELANA'S INSIGHTS -->
+  <div class="section" id="section-insights">
+    <div class="section-header">
+      <div class="section-title">Elana's Insights</div>
+      <div class="section-desc">Key takeaways from your May 31st call. Come back here when you need a reset.</div>
+    </div>
+
+    <div class="insight-card">
+      <div class="ins-num">Insight 1 — The Differentiator</div>
+      <div class="ins-text">AI experience overrides everything else on a CV right now.</div>
+      <div class="ins-sub">Her director said anyone with hands-on AI project experience jumped to the top regardless of everything else. This isn't a nice-to-have. It's the filter.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ins-num">Insight 2 — n8n &gt; Claude for standing out</div>
+      <div class="ins-text">Claude is "easy." n8n is the edge.</div>
+      <div class="ins-sub">Prompt-based tools are table stakes. n8n requires you to connect APIs and think architecturally. That's what hiring managers get excited about. Build there first.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ins-num">Insight 3 — The Shift Is Real</div>
+      <div class="ins-text">MOPs as a title is being phased out. GTM Engineer is what's next.</div>
+      <div class="ins-sub">Her CMO confirmed it. The role is evolving — more AI-focused, more technical. If you get a standard MOPs role today, it may look completely different in 12–24 months. Position for the direction, not the current label.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ins-num">Insight 4 — The Real Bottleneck</div>
+      <div class="ins-text">Your presentation is likely the issue — not your skills.</div>
+      <div class="ins-sub">You know you can do the work. You're just not communicating it convincingly. The gap isn't capability — it's articulation. Lead with what you'd do, not just what you've done.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ins-num">Insight 5 — Vision Over History</div>
+      <div class="ins-text">"If I were in this role, here's what I'd build" is more powerful than a resume recitation.</div>
+      <div class="ins-sub">Especially for GTM engineer / AI MOPs roles where nobody has the exact experience. Coming in with a concrete vision of what you'd improve is what "creativity" means to hiring managers.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ins-num">Insight 6 — Apply Above Yourself</div>
+      <div class="ins-text">50% of people in their roles aren't qualified for them.</div>
+      <div class="ins-sub">Her sister's rule — and Elana lives by it. The market runs on confidence and fit, not perfect credential matching. You already proved this at Cognyte. Do it again.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ins-num">Insight 7 — Gap Questions Are Tests</div>
+      <div class="ins-text">When they push on what you haven't done, they may be testing how you handle pressure — not disqualifying you.</div>
+      <div class="ins-sub">Have the framework ready: "I haven't done X yet — but here's what I have done, and here's why I know I can." Confidence under pressure is the signal they're looking for.</div>
+    </div>
+    <div class="insight-card" style="border-left-color: var(--warn); box-shadow: -3px 0 18px rgba(251,191,36,0.12);">
+      <div class="ins-num" style="color:var(--warn)">Insight 8 — The Best Tip of the Call</div>
+      <div class="ins-text">Define one clear unique selling point. Make it the centerpiece of everything.</div>
+      <div class="ins-sub">Not a list of skills — one thing that makes you different. Then your CV, your pitch, and every interview answer builds around it. Everything else is noise until you nail this.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ins-num">Insight 9 — Stepping Stone Strategy</div>
+      <div class="ins-text">A short pivot role to build missing AI experience is a legitimate path — not a step down.</div>
+      <div class="ins-sub">Elana did it herself. Went to a company she didn't want to work for, got the skills she needed, moved up. If the AI experience gap keeps blocking you, a cloud/AI integration role (even 6 months) may be the faster route to the GTM engineer title.</div>
+    </div>
+  </div>
+
+  <!-- ⑥ 6-WEEK LEARNING PLAN -->
+  <div class="section" id="section-plan">
+    <!-- lp styles now in main <style> block above -->
+
+    <div class="section-header">
+      <div class="section-title">6-Week GTM Engineering Plan</div>
+      <div class="section-desc">Free tools only. Each week builds on the last. By week 6 you have a complete Clay → Make → HubSpot pipeline, n8n AI workflow, HubSpot custom code, and Python API script — all documented and demoable.</div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div class="card-title" style="margin-bottom:2px">Overall Progress</div>
+          <div style="font-size:12px;color:var(--text-muted)" id="lp-done-count">0 / 21 tasks complete</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span id="lp-week-label" style="font-size:12px;color:var(--text-muted)">Week 1 of 6</span>
+          <span style="font-size:16px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace" id="lp-progress-pct">0%</span>
+          <button class="btn btn-primary" id="lp-start-btn" onclick="lpStartPlan()" style="font-size:12px;padding:6px 12px">Start Plan Today</button>
+        </div>
+      </div>
+      <div class="lp-prog-bar"><div class="lp-prog-fill" id="lp-progress-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- WEEK 1 -->
+    <div class="lp-week-card" id="lp-week-1">
+      <div class="lp-week-head">
+        <span class="lp-wnum">Week 1</span>
+        <span class="lp-wtitle">Clay — Data Enrichment Foundations</span>
+        <span class="lp-cbadge" id="lp-badge-1">Current Focus</span>
+      </div>
+      <div class="lp-week-body">
+        <div class="lp-project-desc">Build a Clay table of 50 target B2B/SaaS companies. Enrich with LinkedIn URL, employee count, tech stack signals, HubSpot usage indicator, and hiring signals. Add an AI column: ICP score 1–10 + one-line rationale for "would this company hire a GTM Engineer?" Filter to top 20.</div>
+        <div class="lp-task" onclick="document.getElementById('lp-t1').click()"><input type="checkbox" id="lp-t1"><label for="lp-t1">Create free Clay account and complete the quickstart tutorial</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t2').click()"><input type="checkbox" id="lp-t2"><label for="lp-t2">Build Clay table of 50 target companies with waterfall enrichment (LinkedIn, employee count, tech stack, HubSpot usage)</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t3').click()"><input type="checkbox" id="lp-t3"><label for="lp-t3">Add AI column scoring ICP fit 1–10 with one-line rationale, filter + export top 20 as CSV</label></div>
+        <div class="lp-week-foot">
+          <div class="lp-tools">
+            <a href="https://clay.com" target="_blank" class="lp-tool">clay.com</a>
+            <a href="https://apollo.io" target="_blank" class="lp-tool">apollo.io</a>
+            <a href="https://www.youtube.com/@n8nandme" target="_blank" class="lp-tool">n8n and Me (YouTube)</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span class="lp-artifact">📎 Shareable Clay table + exported CSV</span>
+            <span class="lp-cost">$0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 2 -->
+    <div class="lp-week-card" id="lp-week-2">
+      <div class="lp-week-head">
+        <span class="lp-wnum">Week 2</span>
+        <span class="lp-wtitle">Make — Orchestration Layer</span>
+        <span class="lp-cbadge" id="lp-badge-2">Current Focus</span>
+      </div>
+      <div class="lp-week-body">
+        <div class="lp-project-desc">Build a Make scenario: receive Clay webhook when company ICP ≥7 → deduplicate against HubSpot by domain → create HubSpot Company with all enrichment fields mapped → log result (created or skipped) to Google Sheet with timestamp.</div>
+        <div class="lp-task" onclick="document.getElementById('lp-t4').click()"><input type="checkbox" id="lp-t4"><label for="lp-t4">Create free Make account and complete the webhook + HubSpot module tutorial</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t5').click()"><input type="checkbox" id="lp-t5"><label for="lp-t5">Build Make scenario: Clay webhook trigger → HubSpot search by domain (dedup) → create Company with enrichment fields</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t6').click()"><input type="checkbox" id="lp-t6"><label for="lp-t6">Add Google Sheet log step + test with 5 real companies, screenshot the resulting HubSpot records</label></div>
+        <div class="lp-week-foot">
+          <div class="lp-tools">
+            <a href="https://make.com" target="_blank" class="lp-tool">make.com</a>
+            <a href="https://app.hubspot.com/developer-sandbox-catalog" target="_blank" class="lp-tool">HubSpot Dev Sandbox</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span class="lp-artifact">📎 Make scenario screenshot + HubSpot Company record</span>
+            <span class="lp-cost">$0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 3 -->
+    <div class="lp-week-card" id="lp-week-3">
+      <div class="lp-week-head">
+        <span class="lp-wnum">Week 3</span>
+        <span class="lp-wtitle">Clay → Make → HubSpot Full Pipeline</span>
+        <span class="lp-cbadge" id="lp-badge-3">Current Focus</span>
+      </div>
+      <div class="lp-week-body">
+        <div class="lp-project-desc">Integration week. Extend Clay table with contact-level enrichment (waterfall email find). Extend Make to create Contact + Company + association, set lifecycle stage by ICP tier, enroll in HubSpot workflow. Record a 2–3 min Loom demo. Write a GitHub README with architecture diagram. This is your centerpiece portfolio piece.</div>
+        <div class="lp-task" onclick="document.getElementById('lp-t7').click()"><input type="checkbox" id="lp-t7"><label for="lp-t7">Add contact enrichment to Clay table: waterfall email find (Clay built-in → Hunter.io → Apollo)</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t8').click()"><input type="checkbox" id="lp-t8"><label for="lp-t8">Extend Make: create Contact + Company + association + set lifecycle stage by ICP score tier (7–8 = Lead, 9–10 = MQL)</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t9').click()"><input type="checkbox" id="lp-t9"><label for="lp-t9">Add HubSpot workflow: auto-assign contacts based on ICP tier, run end-to-end test with 5 companies</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t10').click()"><input type="checkbox" id="lp-t10"><label for="lp-t10">Record 2–3 min Loom demo of full flow + write GitHub README with architecture diagram</label></div>
+        <div class="lp-week-foot">
+          <div class="lp-tools">
+            <a href="https://clay.com" target="_blank" class="lp-tool">Clay</a>
+            <a href="https://make.com" target="_blank" class="lp-tool">Make</a>
+            <a href="https://hunter.io" target="_blank" class="lp-tool">Hunter.io (free)</a>
+            <a href="https://loom.com" target="_blank" class="lp-tool">Loom (free)</a>
+            <a href="https://github.com" target="_blank" class="lp-tool">GitHub</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span class="lp-artifact">📎 Loom demo + GitHub repo with README</span>
+            <span class="lp-cost">$0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 4 -->
+    <div class="lp-week-card" id="lp-week-4">
+      <div class="lp-week-head">
+        <span class="lp-wnum">Week 4</span>
+        <span class="lp-wtitle">n8n — AI-Powered Workflow</span>
+        <span class="lp-cbadge" id="lp-badge-4">Current Focus</span>
+      </div>
+      <div class="lp-week-body">
+        <div class="lp-project-desc">Install n8n locally (npx n8n — completely free). Build: HubSpot webhook triggers on new high-ICP contact → HTTP node fetches company LinkedIn description → Claude API node generates a personalized first-touch email draft → HubSpot node saves draft as contact note. SDR reviews and sends in 30 seconds. Extends the HITL pattern from your existing agent dashboard project.</div>
+        <div class="lp-task" onclick="document.getElementById('lp-t11').click()"><input type="checkbox" id="lp-t11"><label for="lp-t11">Install n8n locally (npx n8n) and connect to HubSpot via webhook trigger</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t12').click()"><input type="checkbox" id="lp-t12"><label for="lp-t12">Add HTTP node to fetch company context + Claude API node to generate personalized email draft</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t13').click()"><input type="checkbox" id="lp-t13"><label for="lp-t13">Add HubSpot write-back node to save draft as contact note, test end-to-end and screenshot the result</label></div>
+        <div class="lp-week-foot">
+          <div class="lp-tools">
+            <a href="https://n8n.io" target="_blank" class="lp-tool">n8n.io</a>
+            <a href="https://www.youtube.com/@n8nandme" target="_blank" class="lp-tool">n8n and Me</a>
+            <a href="https://console.anthropic.com" target="_blank" class="lp-tool">Claude API</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span class="lp-artifact">📎 n8n workflow screenshot + HubSpot contact note with AI draft</span>
+            <span class="lp-cost">~$0.05</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 5 -->
+    <div class="lp-week-card" id="lp-week-5">
+      <div class="lp-week-head">
+        <span class="lp-wnum">Week 5</span>
+        <span class="lp-wtitle">HubSpot Ops Hub — Custom Code Action</span>
+        <span class="lp-cbadge" id="lp-badge-5">Current Focus</span>
+      </div>
+      <div class="lp-week-body">
+        <div class="lp-project-desc">Your home turf, extended. Build a custom code action (JavaScript) inside a HubSpot workflow: takes company domain → calls Brandfetch free API → returns industry + employee size → writes back to custom HubSpot properties. Also build a calculated property that scores leads on 4 weighted factors. Document the "why custom code vs. native workflow" logic — that's the interview point.</div>
+        <div class="lp-task" onclick="document.getElementById('lp-t14').click()"><input type="checkbox" id="lp-t14"><label for="lp-t14">Set up HubSpot dev sandbox with Operations Hub, complete custom code action tutorial</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t15').click()"><input type="checkbox" id="lp-t15"><label for="lp-t15">Build custom code action: domain input → Brandfetch API call → write industry + size back to HubSpot properties</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t16').click()"><input type="checkbox" id="lp-t16"><label for="lp-t16">Build calculated property scoring model (company size + industry + job title seniority + form activity), document before/after + post code to GitHub</label></div>
+        <div class="lp-week-foot">
+          <div class="lp-tools">
+            <a href="https://app.hubspot.com/developer-sandbox-catalog" target="_blank" class="lp-tool">HubSpot Dev Sandbox</a>
+            <a href="https://www.brandfetch.com/developers" target="_blank" class="lp-tool">Brandfetch API (free)</a>
+            <a href="https://github.com" target="_blank" class="lp-tool">GitHub</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span class="lp-artifact">📎 HubSpot workflow + custom code on GitHub + before/after screenshot</span>
+            <span class="lp-cost">$0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 6 -->
+    <div class="lp-week-card" id="lp-week-6">
+      <div class="lp-week-head">
+        <span class="lp-wnum">Week 6</span>
+        <span class="lp-wtitle">Python + HubSpot API + LinkedIn Agent Extension</span>
+        <span class="lp-cbadge" id="lp-badge-6">Current Focus</span>
+      </div>
+      <div class="lp-week-body">
+        <div class="lp-project-desc">Two deliverables. (A) Python script: reads HubSpot contacts where lifecycle = lead AND last activity > 60 days, calculates dormancy score, bulk-updates a custom property, generates a CSV report grouped by owner. Commit to GitHub with README. (B) Extend your LinkedIn Content Agent: add a pre-step that pulls HubSpot deal activity this week and passes it as context so posts reference real pipeline patterns.</div>
+        <div class="lp-task" onclick="document.getElementById('lp-t17').click()"><input type="checkbox" id="lp-t17"><label for="lp-t17">Create HubSpot Private App token + write Python script to read contacts by lifecycle stage + last activity filter</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t18').click()"><input type="checkbox" id="lp-t18"><label for="lp-t18">Add bulk update logic (set dormancy_tier custom property) + generate CSV report grouped by account owner</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t19').click()"><input type="checkbox" id="lp-t19"><label for="lp-t19">Commit Python script to GitHub with README explaining the business problem and output format</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t20').click()"><input type="checkbox" id="lp-t20"><label for="lp-t20">Extend LinkedIn Content Agent: add HubSpot API pre-step that fetches this week's deal stage movement as context for the research prompt</label></div>
+        <div class="lp-task" onclick="document.getElementById('lp-t21').click()"><input type="checkbox" id="lp-t21"><label for="lp-t21">Run the extended agent, verify HubSpot context appears in the generated post drafts, document the change</label></div>
+        <div class="lp-week-foot">
+          <div class="lp-tools">
+            <a href="https://developers.hubspot.com/docs/api/overview" target="_blank" class="lp-tool">HubSpot API Docs</a>
+            <a href="https://github.com" target="_blank" class="lp-tool">GitHub</a>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span class="lp-artifact">📎 Python repo on GitHub + sample CSV output + extended agent log</span>
+            <span class="lp-cost">$0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USP CARD -->
+    <div class="card" style="margin-top:8px; border-left:3px solid var(--done); box-shadow: 0 0 20px var(--done-dim);">
+      <div class="card-title">Your Unique Selling Point</div>
+      <p style="font-size:14px; line-height:1.6; color:var(--text-sub); font-style:italic;">"Unlike most GTM Engineer candidates who are still learning AI tools theoretically, I've already shipped a production-grade autonomous pipeline — a scheduled multi-MCP agent that independently researches trends, drafts LinkedIn content, and notifies me on WhatsApp with zero daily input — while simultaneously owning a full enterprise HubSpot stack at a cybersecurity firm where most AI integrations were locked out entirely. Now I'm adding the GTM engineering layer on top of that foundation: Clay enrichment pipelines, Make orchestration, n8n API workflows, and HubSpot custom code — built by someone who already knows how the CRM actually works, not just how to connect to it."</p>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // NAV
+  function showSection(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    el.classList.add('active');
+  }
+
+  // PERSISTENCE
+  function save(key) {
+    const el = document.getElementById(key);
+    if (el) localStorage.setItem('myedge_' + key, el.value);
+  }
+
+  function loadAll() {
+    const textFields = [
+      'usp-main','usp-diff','usp-angle','usp-pitch',
+      'n8n-notes',
+      'gap-ai','gap-n8n','gap-senior','interview-vision','interview-other'
+    ];
+    textFields.forEach(key => {
+      const val = localStorage.getItem('myedge_' + key);
+      const el = document.getElementById(key);
+      if (val !== null && el) el.value = val;
+    });
+
+    // checkboxes
+    for (let i = 1; i <= 8; i++) {
+      const key = 'n8n' + i;
+      const val = localStorage.getItem('myedge_cb_' + key);
+      const el = document.getElementById(key);
+      if (val === 'true' && el) {
+        el.checked = true;
+        el.closest('.check-item').classList.add('done');
+      }
+    }
+    updateProgress();
+
+    // workflows
+    const saved = localStorage.getItem('myedge_workflows');
+    if (saved) {
+      try { workflows = JSON.parse(saved); renderWorkflows(); } catch(e) {}
+    }
+  }
+
+  // CHECKLIST
+  function toggleCheck(item, id) {
+    const cb = document.getElementById(id);
+    cb.checked = !cb.checked;
+    item.classList.toggle('done', cb.checked);
+    localStorage.setItem('myedge_cb_' + id, cb.checked);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    let done = 0;
+    for (let i = 1; i <= 8; i++) {
+      const el = document.getElementById('n8n' + i);
+      if (el && el.checked) done++;
+    }
+    const pct = Math.round((done / 8) * 100);
+    document.getElementById('n8n-pct').textContent = pct + '%';
+    document.getElementById('n8n-bar').style.width = pct + '%';
+  }
+
+  // WORKFLOWS
+  let workflows = [];
+
+  function toggleAddForm() {
+    const form = document.getElementById('add-form');
+    const visible = form.style.display !== 'none';
+    form.style.display = visible ? 'none' : 'block';
+    if (!visible) setTimeout(() => document.getElementById('new-name').focus(), 50);
+  }
+
+  function addWorkflow() {
+    const name = document.getElementById('new-name').value.trim();
+    if (!name) { document.getElementById('new-name').focus(); return; }
+    const desc = document.getElementById('new-desc').value.trim();
+    const tool = document.getElementById('new-tool').value;
+    const status = document.getElementById('new-status').value;
+    workflows.unshift({ id: Date.now(), name, desc, tool, status });
+    saveWorkflows();
+    renderWorkflows();
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-desc').value = '';
+    document.getElementById('add-form').style.display = 'none';
+  }
+
+  function removeWorkflow(id) {
+    if (!confirm('Remove this project?')) return;
+    workflows = workflows.filter(w => w.id !== id);
+    saveWorkflows();
+    renderWorkflows();
+  }
+
+  function saveWorkflows() {
+    localStorage.setItem('myedge_workflows', JSON.stringify(workflows));
+  }
+
+  function renderWorkflows() {
+    const list = document.getElementById('workflow-list');
+    const total = workflows.length;
+    const done = workflows.filter(w => w.status === 'done').length;
+    const wip = workflows.filter(w => w.status === 'wip').length;
+
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-done').textContent = done;
+    document.getElementById('stat-wip').textContent = wip;
+
+    if (total === 0) {
+      list.innerHTML = '<div class="empty-state"><div class="empty-icon">🛠️</div>No projects yet — add your first one above.<br><span style="font-size:11px;display:block;margin-top:4px">Personal projects count. Start small.</span></div>';
+      return;
+    }
+
+    const dotClass = { done: 'status-done', wip: 'status-wip', idea: 'status-idea' };
+
+    list.innerHTML = workflows.map(w => `
+      <div class="workflow-item">
+        <div class="status-dot ${dotClass[w.status]}"></div>
+        <div class="wf-name">
+          <strong>${escHtml(w.name)}</strong>
+          ${w.desc ? `<span>${escHtml(w.desc)}</span>` : ''}
+        </div>
+        <span class="tag tag-${w.tool}">${w.tool}</span>
+        <button class="btn-icon" onclick="removeWorkflow(${w.id})" title="Remove">✕</button>
+      </div>
+    `).join('');
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // LEARNING PLAN
+  (function() {
+    const TOTAL_TASKS = 21;
+    const LP_PREFIX = 'lp_';
+
+    function lpSave(key, val) { localStorage.setItem(LP_PREFIX + key, val); }
+    function lpLoad(key) { return localStorage.getItem(LP_PREFIX + key); }
+
+    function lpUpdateProgress() {
+      let done = 0;
+      for (let i = 1; i <= 21; i++) {
+        const el = document.getElementById('lp-t' + i);
+        if (el && el.checked) done++;
+      }
+      const pct = Math.round((done / TOTAL_TASKS) * 100);
+      const bar = document.getElementById('lp-progress-fill');
+      const pctEl = document.getElementById('lp-progress-pct');
+      const doneEl = document.getElementById('lp-done-count');
+      if (bar) bar.style.width = pct + '%';
+      if (pctEl) pctEl.textContent = pct + '%';
+      if (doneEl) doneEl.textContent = done + ' / ' + TOTAL_TASKS + ' tasks complete';
+    }
+
+    function lpLoadChecks() {
+      for (let i = 1; i <= 21; i++) {
+        const el = document.getElementById('lp-t' + i);
+        if (!el) continue;
+        const saved = lpLoad('t' + i);
+        if (saved === 'true') {
+          el.checked = true;
+          el.closest('.lp-task').classList.add('lp-done');
+        }
+        el.addEventListener('change', function() {
+          lpSave('t' + this.id.replace('lp-t',''), this.checked);
+          this.closest('.lp-task').classList.toggle('lp-done', this.checked);
+          lpUpdateProgress();
+        });
+      }
+      lpUpdateProgress();
+    }
+
+    function lpSetCurrentWeek() {
+      const startRaw = lpLoad('start');
+      let currentWeek = 1;
+      if (startRaw) {
+        const start = new Date(startRaw);
+        const now = new Date();
+        const daysDiff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+        currentWeek = Math.min(6, Math.max(1, Math.ceil((daysDiff + 1) / 7)));
+      }
+      for (let w = 1; w <= 6; w++) {
+        const card = document.getElementById('lp-week-' + w);
+        const badge = document.getElementById('lp-badge-' + w);
+        if (!card) continue;
+        if (w === currentWeek) {
+          card.classList.add('lp-current');
+          if (badge) badge.style.display = 'inline-block';
+        } else {
+          card.classList.remove('lp-current');
+          if (badge) badge.style.display = 'none';
+        }
+      }
+      const label = document.getElementById('lp-week-label');
+      if (label) label.textContent = 'Week ' + currentWeek + ' of 6';
+    }
+
+    function lpStartPlan() {
+      lpSave('start', new Date().toISOString());
+      lpSetCurrentWeek();
+      const btn = document.getElementById('lp-start-btn');
+      if (btn) { btn.textContent = '✓ Plan started'; btn.disabled = true; btn.style.background = 'var(--done)'; btn.style.color = '#0D0D10'; btn.style.boxShadow = '0 0 14px var(--done-glow)'; }
+    }
+
+    window.lpStartPlan = lpStartPlan;
+
+    // Init on section load (poll for DOM ready)
+    function lpInit() {
+      if (document.getElementById('lp-week-1')) {
+        lpLoadChecks();
+        lpSetCurrentWeek();
+        const startRaw = lpLoad('start');
+        const btn = document.getElementById('lp-start-btn');
+        if (startRaw && btn) { btn.textContent = '✓ Plan started'; btn.disabled = true; btn.style.background = 'var(--done)'; btn.style.color = '#0D0D10'; btn.style.boxShadow = '0 0 14px var(--done-glow)'; }
+      } else {
+        setTimeout(lpInit, 100);
+      }
+    }
+    lpInit();
+  })();
+
+  // GAP ANSWERS
+  function toggleGap(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.gap-toggle');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    toggle.textContent = isOpen ? '▼ expand' : '▲ collapse';
+  }
+
+  // INIT
+  loadAll();
+</script>
+</body>
+</html>
