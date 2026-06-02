@@ -2425,12 +2425,17 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
     });
 
     // If fully configured: skip form, show plan
-    if (savedName && savedTool && CURRICULA[savedTool]) {
-      ML_STATE.tool = savedTool;
-      const btn = document.getElementById('ml-tool-' + savedTool);
-      if (btn) btn.classList.add('selected');
-      const plan = generatePlan(savedTool, savedWeeks, savedHours);
-      mlShowPlan(plan, savedTool, savedName);
+    const savedTools = JSON.parse(localStorage.getItem('myedge_ml_tools') || '[]');
+    if (savedName && savedTools.length > 0 && savedTools.every(k => CURRICULA[k])) {
+      ML_STATE.tools = savedTools;
+      savedTools.forEach(k => {
+        const btn = document.getElementById('ml-tool-' + k);
+        if (btn) btn.classList.add('selected');
+      });
+      const countEl = document.getElementById('ml-tool-count');
+      if (countEl) { countEl.textContent = savedTools.length + ' selected'; countEl.style.display = 'inline'; }
+      const toolPlans = savedTools.map(k => ({ toolKey: k, plan: generatePlan(k, savedWeeks, savedHours) }));
+      mlShowPlan(toolPlans, savedName, savedWeeks, savedHours);
     }
 
     // Restore notes
