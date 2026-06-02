@@ -1801,7 +1801,6 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
   function loadAll() {
     const textFields = [
       'usp-main','usp-diff','usp-angle','usp-pitch',
-      'n8n-notes',
       'gap-ai','gap-n8n','gap-senior','interview-vision','interview-other'
     ];
     textFields.forEach(key => {
@@ -1810,23 +1809,14 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
       if (val !== null && el) el.value = val;
     });
 
-    // checkboxes
-    for (let i = 1; i <= 8; i++) {
-      const key = 'n8n' + i;
-      const val = localStorage.getItem('myedge_cb_' + key);
-      const el = document.getElementById(key);
-      if (val === 'true' && el) {
-        el.checked = true;
-        el.closest('.check-item').classList.add('done');
-      }
-    }
-    updateProgress();
-
     // workflows
     const saved = localStorage.getItem('myedge_workflows');
     if (saved) {
       try { workflows = JSON.parse(saved); renderWorkflows(); } catch(e) {}
     }
+
+    // My Learning (init after DOM ready)
+    mlInit();
   }
 
   // CHECKLIST
