@@ -1839,14 +1839,7 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
   }
 
   function updateProgress() {
-    let done = 0;
-    for (let i = 1; i <= 8; i++) {
-      const el = document.getElementById('n8n' + i);
-      if (el && el.checked) done++;
-    }
-    const pct = Math.round((done / 8) * 100);
-    document.getElementById('n8n-pct').textContent = pct + '%';
-    document.getElementById('n8n-bar').style.width = pct + '%';
+    // Stub — legacy n8n checkboxes replaced by mlToggleUnit(). Safe no-op.
   }
 
   // WORKFLOWS
