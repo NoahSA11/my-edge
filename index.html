@@ -2480,23 +2480,21 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
       setTimeout(() => nameEl.style.borderColor = '', 1600);
       return;
     }
-    if (!ML_STATE.tool) {
+    if (!ML_STATE.tools.length) {
       const grid = document.getElementById('ml-tool-grid');
       grid.style.animation = 'none';
-      requestAnimationFrame(() => {
-        grid.style.animation = 'shake 0.35s ease';
-      });
+      requestAnimationFrame(() => { grid.style.animation = 'shake 0.35s ease'; });
       return;
     }
 
-    const { tool, weeks, hours } = ML_STATE;
+    const { tools, weeks, hours } = ML_STATE;
     localStorage.setItem('myedge_ml_name',  name);
-    localStorage.setItem('myedge_ml_tool',  tool);
+    localStorage.setItem('myedge_ml_tools', JSON.stringify(tools));
     localStorage.setItem('myedge_ml_weeks', weeks);
     localStorage.setItem('myedge_ml_hours', hours);
 
-    const plan = generatePlan(tool, weeks, hours);
-    mlShowPlan(plan, tool, name);
+    const toolPlans = tools.map(k => ({ toolKey: k, plan: generatePlan(k, weeks, hours) }));
+    mlShowPlan(toolPlans, name, weeks, hours);
   }
 
   function mlShowPlan(plan, toolKey, name) {
