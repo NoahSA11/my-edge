@@ -2602,27 +2602,31 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
   function mlChangePlan() {
     if (!confirm('Reset your plan? Current progress will be cleared.')) return;
 
-    // Clear all unit progress for the current plan
-    const toolKey = localStorage.getItem('myedge_ml_tool');
-    const weeks   = parseInt(localStorage.getItem('myedge_ml_weeks')) || ML_STATE.weeks;
-    const hours   = parseInt(localStorage.getItem('myedge_ml_hours')) || ML_STATE.hours;
-    if (toolKey && CURRICULA[toolKey]) {
-      generatePlan(toolKey, weeks, hours).forEach(w =>
-        w.units.forEach(u => localStorage.removeItem('myedge_unit_' + u.id))
-      );
-    }
+    // Clear all unit progress for every saved tool
+    const savedTools = JSON.parse(localStorage.getItem('myedge_ml_tools') || '[]');
+    const weeks = parseInt(localStorage.getItem('myedge_ml_weeks')) || ML_STATE.weeks;
+    const hours = parseInt(localStorage.getItem('myedge_ml_hours')) || ML_STATE.hours;
+    savedTools.forEach(k => {
+      if (CURRICULA[k]) {
+        generatePlan(k, weeks, hours).forEach(w =>
+          w.units.forEach(u => localStorage.removeItem('myedge_unit_' + u.id))
+        );
+      }
+    });
 
     localStorage.removeItem('myedge_ml_name');
-    localStorage.removeItem('myedge_ml_tool');
+    localStorage.removeItem('myedge_ml_tools');
     localStorage.removeItem('myedge_ml_weeks');
     localStorage.removeItem('myedge_ml_hours');
-    ML_STATE = { tool: null, weeks: 6, hours: 4 };
+    ML_STATE = { tools: [], weeks: 6, hours: 4 };
 
     // Reset UI to form state
     document.getElementById('ml-plan-view').style.display = 'none';
     document.getElementById('ml-onboard').style.display   = 'flex';
     document.getElementById('ml-name').value = '';
     document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('selected'));
+    const countEl = document.getElementById('ml-tool-count');
+    if (countEl) countEl.style.display = 'none';
     document.querySelectorAll('.option-btn').forEach(btn => {
       const type = btn.dataset.type;
       const val  = parseInt(btn.dataset.val);
