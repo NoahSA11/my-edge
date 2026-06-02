@@ -2315,8 +2315,13 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
           ${week.units.map(unit => {
             const isDone = localStorage.getItem('myedge_unit_' + unit.id) === 'true';
             return `
-              <div class="plan-unit${isDone ? ' done' : ''}" onclick="mlToggleUnit(this,'${unit.id}')">
-                <input type="checkbox" ${isDone ? 'checked' : ''} onclick="event.stopPropagation()">
+              <div class="plan-unit${isDone ? ' done' : ''}"
+                   tabindex="0"
+                   role="checkbox"
+                   aria-checked="${isDone}"
+                   onclick="mlToggleUnit(this,'${unit.id}')"
+                   onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();mlToggleUnit(this,'${unit.id}');}">
+                <input type="checkbox" ${isDone ? 'checked' : ''} tabindex="-1" onclick="event.stopPropagation()">
                 <div class="plan-unit-content">
                   <div class="plan-unit-title">${escHtml(unit.title)}</div>
                   <div class="plan-unit-meta">
