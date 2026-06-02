@@ -1991,6 +1991,363 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
     lpInit();
   })();
 
+  // ── MY LEARNING ──────────────────────────────────
+  const CURRICULA = {
+    n8n: {
+      label: 'n8n', icon: '⚡',
+      tagline: 'Visual automation + API connections',
+      available: true,
+      units: [
+        { title: 'Set up n8n cloud free account', hours: 0.5, type: 'setup',
+          resource: 'n8n Quickstart', resource_url: 'https://docs.n8n.io/try-it-out/quickstart/' },
+        { title: 'Complete the n8n Level 1 course', hours: 2, type: 'course',
+          resource: 'n8n Level 1 Course', resource_url: 'https://docs.n8n.io/courses/level-one/' },
+        { title: 'Build your first workflow: trigger → action', hours: 1, type: 'project',
+          resource: 'n8n Workflow Templates', resource_url: 'https://n8n.io/workflows/' },
+        { title: 'Connect an external API (Airtable, Notion, or GitHub)', hours: 1.5, type: 'project',
+          resource: 'n8n Integrations Docs', resource_url: 'https://docs.n8n.io/integrations/' },
+        { title: 'Complete the n8n Level 2 course', hours: 2, type: 'course',
+          resource: 'n8n Level 2 Course', resource_url: 'https://docs.n8n.io/courses/level-two/' },
+        { title: 'Watch the n8n AI workflow intro tutorial', hours: 1, type: 'course',
+          resource: 'n8n AI Intro Tutorial', resource_url: 'https://docs.n8n.io/advanced-ai/intro-tutorial/' },
+        { title: 'Build an AI-powered workflow (Claude or OpenAI node)', hours: 2, type: 'project',
+          resource: 'n8n Advanced AI Docs', resource_url: 'https://docs.n8n.io/advanced-ai/' },
+        { title: 'Build a GTM workflow (lead enrichment, CRM sync, or outreach)', hours: 2.5, type: 'project',
+          resource: 'n8n Workflow Templates', resource_url: 'https://n8n.io/workflows/' },
+        { title: 'Earn the n8n community badge (complete Level 1 quiz)', hours: 0.5, type: 'milestone',
+          resource: 'n8n Level 1 Course', resource_url: 'https://docs.n8n.io/courses/level-one/' },
+        { title: 'Build 2 more portfolio-ready workflows', hours: 3, type: 'project',
+          resource: 'n8n Community Forum', resource_url: 'https://community.n8n.io' },
+        { title: 'Write a 1-page workflow explainer (what, why, outcome)', hours: 1, type: 'milestone',
+          resource: 'n8n Workflow Templates', resource_url: 'https://n8n.io/workflows/' },
+        { title: 'Practice talking through your workflows (interview prep)', hours: 1, type: 'milestone',
+          resource: 'n8n and Me (YouTube)', resource_url: 'https://www.youtube.com/@n8nandme' },
+        { title: 'Add n8n project with outcome to CV and LinkedIn', hours: 0.5, type: 'milestone',
+          resource: 'n8n Docs', resource_url: 'https://docs.n8n.io/' },
+        { title: 'Answer one question in the n8n community forum', hours: 0.5, type: 'milestone',
+          resource: 'n8n Community', resource_url: 'https://community.n8n.io' },
+      ]
+    },
+    clay: {
+      label: 'Clay', icon: '🟤',
+      tagline: 'Lead enrichment + GTM data ops',
+      available: true,
+      units: [
+        { title: 'Create Clay free account (100 credits/month)', hours: 0.5, type: 'setup',
+          resource: 'Clay 101 Course', resource_url: 'https://university.clay.com/courses/clay-101' },
+        { title: 'Complete Clay 101 course', hours: 2, type: 'course',
+          resource: 'Clay 101', resource_url: 'https://university.clay.com/courses/clay-101' },
+        { title: 'Build first table: enrich a list of companies', hours: 1.5, type: 'project',
+          resource: 'Clay University', resource_url: 'https://university.clay.com/courses' },
+        { title: 'Use Claygent (AI agent) to research prospects', hours: 1.5, type: 'project',
+          resource: 'Clay University', resource_url: 'https://university.clay.com/courses' },
+        { title: 'Connect Clay to a CRM (HubSpot or Salesforce)', hours: 1, type: 'project',
+          resource: 'Clay Docs', resource_url: 'https://university.clay.com/docs' },
+        { title: 'Build a waterfall enrichment flow (3+ data sources)', hours: 2, type: 'project',
+          resource: 'Clay University Courses', resource_url: 'https://university.clay.com/courses' },
+        { title: 'Create a personalized outreach table with AI-written messages', hours: 2, type: 'project',
+          resource: 'Grow With Clay (YouTube)', resource_url: 'https://www.youtube.com/@GrowWithClay' },
+        { title: 'Watch Clay 101 YouTube series for workflow inspiration', hours: 1, type: 'course',
+          resource: 'Clay 101 Playlist', resource_url: 'https://www.youtube.com/playlist?list=PLOk1iliTgMrWWrQOFtK69xzHkBhF75Jjm' },
+        { title: 'Build a full GTM enrichment pipeline end-to-end', hours: 3, type: 'project',
+          resource: 'Clay University', resource_url: 'https://university.clay.com/courses' },
+        { title: 'Document your Clay workflow (inputs, outputs, logic)', hours: 0.5, type: 'milestone',
+          resource: 'Clay Docs', resource_url: 'https://university.clay.com/docs' },
+        { title: 'Add Clay enrichment project to portfolio and CV', hours: 0.5, type: 'milestone',
+          resource: 'Grow With Clay (YouTube)', resource_url: 'https://www.youtube.com/@GrowWithClay' },
+      ]
+    },
+    hubspot: {
+      label: 'HubSpot', icon: '🟠',
+      tagline: 'CRM + sales/marketing automation',
+      available: true,
+      units: [
+        { title: 'Create HubSpot free CRM account', hours: 0.5, type: 'setup',
+          resource: 'HubSpot Academy', resource_url: 'https://academy.hubspot.com/courses' },
+        { title: 'Watch HubSpot CRM beginner tutorial (YouTube)', hours: 1, type: 'course',
+          resource: 'HubSpot CRM Tutorial', resource_url: 'https://www.youtube.com/watch?v=8VUWyMVK2Uc' },
+        { title: 'Complete HubSpot CRM Training course', hours: 2, type: 'course',
+          resource: 'CRM for Growth', resource_url: 'https://academy.hubspot.com/courses/set-up-your-hubspot-crm-for-growth' },
+        { title: 'Set up a contact pipeline with deal stages', hours: 1, type: 'project',
+          resource: 'HubSpot Academy', resource_url: 'https://academy.hubspot.com/courses' },
+        { title: 'Create a workflow automation (lead rotation or email trigger)', hours: 1.5, type: 'project',
+          resource: 'HubSpot Academy', resource_url: 'https://academy.hubspot.com/courses' },
+        { title: 'Complete HubSpot Sales Hub Software certification (free exam)', hours: 3, type: 'course',
+          resource: 'Sales Hub Cert', resource_url: 'https://academy.hubspot.com/courses/hubspot-sales-hub-software' },
+        { title: 'Complete HubSpot Reporting certification (free exam)', hours: 2, type: 'course',
+          resource: 'Reporting Cert', resource_url: 'https://academy.hubspot.com/courses/hubspot-reporting' },
+        { title: 'Build a custom report and dashboard in HubSpot', hours: 1.5, type: 'project',
+          resource: 'HubSpot Academy', resource_url: 'https://academy.hubspot.com/courses' },
+        { title: 'Integrate HubSpot with an external tool (Clay, Slack, or Google Sheets)', hours: 1.5, type: 'project',
+          resource: 'HubSpot Academy', resource_url: 'https://academy.hubspot.com/courses' },
+        { title: 'Write 2 HubSpot automation use cases you can explain in an interview', hours: 1, type: 'milestone',
+          resource: 'HubSpot Cert Overview', resource_url: 'https://academy.hubspot.com/certification-overview' },
+        { title: 'Add HubSpot certifications to LinkedIn', hours: 0.5, type: 'milestone',
+          resource: 'HubSpot Cert Overview', resource_url: 'https://academy.hubspot.com/certification-overview' },
+        { title: 'Add HubSpot CRM project to portfolio and CV', hours: 0.5, type: 'milestone',
+          resource: 'HubSpot Academy', resource_url: 'https://academy.hubspot.com/courses' },
+      ]
+    },
+    make:        { label: 'Make',        icon: '🔗', tagline: 'Visual automation platform',  available: false, units: [] },
+    sql:         { label: 'SQL',         icon: '🗃️', tagline: 'Data querying & analysis',    available: false, units: [] },
+    python:      { label: 'Python',      icon: '🐍', tagline: 'Scripting & automation',       available: false, units: [] },
+    segment:     { label: 'Segment',     icon: '📊', tagline: 'Customer data platform',       available: false, units: [] },
+    claude_api:  { label: 'Claude API',  icon: '🤖', tagline: 'AI-powered integrations',      available: false, units: [] },
+    zapier:      { label: 'Zapier',      icon: '⚡', tagline: 'No-code automation',            available: false, units: [] },
+    salesforce:  { label: 'Salesforce',  icon: '☁️', tagline: 'Enterprise CRM',               available: false, units: [] },
+  };
+
+  let ML_STATE = { tool: null, weeks: 6, hours: 4 };
+
+  // Deterministic greedy plan engine — same inputs always produce same unit→week mapping
+  function generatePlan(toolKey, weeks, hoursPerWeek) {
+    const curriculum = CURRICULA[toolKey];
+    if (!curriculum || curriculum.units.length === 0) return [];
+
+    // Work on a copy; never mutate CURRICULA
+    const remaining = curriculum.units.map((u, i) => ({ ...u, _idx: i }));
+    const plan = [];
+
+    for (let w = 1; w <= weeks && remaining.length > 0; w++) {
+      let weekHours = 0;
+      const weekUnits = [];
+      const deferred = [];
+
+      for (const unit of remaining) {
+        if (unit.hours <= (hoursPerWeek - weekHours) + 0.5) {
+          weekUnits.push({ ...unit, id: `${toolKey}_w${w}_u${unit._idx}`, done: false });
+          weekHours += unit.hours;
+        } else {
+          deferred.push(unit);
+        }
+      }
+
+      remaining.length = 0;
+      remaining.push(...deferred);
+
+      if (weekUnits.length > 0) {
+        plan.push({ week: w, units: weekUnits, totalHours: Math.round(weekHours * 10) / 10 });
+      }
+    }
+
+    // Overflow: any units that didn't fit go into the last week
+    if (remaining.length > 0) {
+      if (plan.length === 0) plan.push({ week: 1, units: [], totalHours: 0 });
+      const last = plan[plan.length - 1];
+      for (const unit of remaining) {
+        last.units.push({ ...unit, id: `${toolKey}_w${last.week}_u${unit._idx}`, done: false });
+        last.totalHours = Math.round((last.totalHours + unit.hours) * 10) / 10;
+      }
+    }
+
+    return plan;
+  }
+
+  function mlInit() {
+    const grid = document.getElementById('ml-tool-grid');
+    if (!grid) return;
+
+    // Render tool buttons
+    grid.innerHTML = Object.entries(CURRICULA).map(([key, c]) => `
+      <button class="tool-btn${!c.available ? ' disabled' : ''}"
+              id="ml-tool-${key}"
+              onclick="mlSelectTool('${key}')"
+              ${!c.available ? 'disabled' : ''}>
+        <span class="tool-btn-icon">${c.icon}</span>
+        <span class="tool-btn-name">${c.label}</span>
+        ${c.available
+          ? `<span class="tool-btn-tag">${c.tagline}</span>`
+          : `<span class="tool-btn-coming">coming soon</span>`}
+      </button>
+    `).join('');
+
+    // Restore saved config
+    const savedName  = localStorage.getItem('myedge_ml_name');
+    const savedTool  = localStorage.getItem('myedge_ml_tool');
+    const savedWeeks = parseInt(localStorage.getItem('myedge_ml_weeks')) || 6;
+    const savedHours = parseInt(localStorage.getItem('myedge_ml_hours')) || 4;
+
+    ML_STATE.weeks = savedWeeks;
+    ML_STATE.hours = savedHours;
+
+    if (savedName) document.getElementById('ml-name').value = savedName;
+
+    // Restore option-btn active states
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      const type = btn.dataset.type;
+      const val  = parseInt(btn.dataset.val);
+      btn.classList.toggle('active',
+        (type === 'weeks' && val === savedWeeks) ||
+        (type === 'hours' && val === savedHours)
+      );
+    });
+
+    // If fully configured: skip form, show plan
+    if (savedName && savedTool && CURRICULA[savedTool]) {
+      ML_STATE.tool = savedTool;
+      const btn = document.getElementById('ml-tool-' + savedTool);
+      if (btn) btn.classList.add('selected');
+      const plan = generatePlan(savedTool, savedWeeks, savedHours);
+      mlShowPlan(plan, savedTool, savedName);
+    }
+
+    // Restore notes
+    const savedNotes = localStorage.getItem('myedge_ml-notes');
+    if (savedNotes) {
+      const notesEl = document.getElementById('ml-notes');
+      if (notesEl) notesEl.value = savedNotes;
+    }
+  }
+
+  function mlSelectTool(key) {
+    if (!CURRICULA[key] || !CURRICULA[key].available) return;
+    ML_STATE.tool = key;
+    document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('selected'));
+    const btn = document.getElementById('ml-tool-' + key);
+    if (btn) btn.classList.add('selected');
+  }
+
+  function mlSelectOption(type, val) {
+    ML_STATE[type] = val;
+    document.querySelectorAll(`.option-btn[data-type="${type}"]`).forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.val) === val);
+    });
+  }
+
+  function mlGeneratePlan() {
+    const nameEl = document.getElementById('ml-name');
+    const name = nameEl.value.trim();
+
+    if (!name) {
+      nameEl.focus();
+      nameEl.style.borderColor = 'var(--danger)';
+      setTimeout(() => nameEl.style.borderColor = '', 1600);
+      return;
+    }
+    if (!ML_STATE.tool) {
+      const grid = document.getElementById('ml-tool-grid');
+      grid.style.animation = 'none';
+      requestAnimationFrame(() => {
+        grid.style.animation = 'shake 0.35s ease';
+      });
+      return;
+    }
+
+    const { tool, weeks, hours } = ML_STATE;
+    localStorage.setItem('myedge_ml_name',  name);
+    localStorage.setItem('myedge_ml_tool',  tool);
+    localStorage.setItem('myedge_ml_weeks', weeks);
+    localStorage.setItem('myedge_ml_hours', hours);
+
+    const plan = generatePlan(tool, weeks, hours);
+    mlShowPlan(plan, tool, name);
+  }
+
+  function mlShowPlan(plan, toolKey, name) {
+    document.getElementById('ml-onboard').style.display = 'none';
+    document.getElementById('ml-plan-view').style.display = 'block';
+
+    const c = CURRICULA[toolKey];
+    const totalUnits = plan.reduce((sum, w) => sum + w.units.length, 0);
+    const weeks = localStorage.getItem('myedge_ml_weeks') || ML_STATE.weeks;
+    const hours = localStorage.getItem('myedge_ml_hours') || ML_STATE.hours;
+
+    document.getElementById('ml-plan-title').textContent = `${name}'s ${c.label} plan`;
+    document.getElementById('ml-plan-subtitle').textContent =
+      `${weeks} weeks · ${hours} hrs/week · ${totalUnits} tasks`;
+
+    const container = document.getElementById('ml-weeks-container');
+    container.innerHTML = '';
+
+    plan.forEach(week => {
+      const weekEl = document.createElement('div');
+      weekEl.className = 'plan-week';
+      weekEl.innerHTML = `
+        <div class="card">
+          <div class="plan-week-header">
+            <span class="plan-week-num">Week ${week.week}</span>
+            <span class="plan-week-hours">${week.totalHours}h</span>
+          </div>
+          ${week.units.map(unit => {
+            const isDone = localStorage.getItem('myedge_unit_' + unit.id) === 'true';
+            return `
+              <div class="plan-unit${isDone ? ' done' : ''}" onclick="mlToggleUnit(this,'${unit.id}')">
+                <input type="checkbox" ${isDone ? 'checked' : ''} onclick="event.stopPropagation()">
+                <div class="plan-unit-content">
+                  <div class="plan-unit-title">${escHtml(unit.title)}</div>
+                  <div class="plan-unit-meta">
+                    <span class="plan-unit-hours">${unit.hours}h</span>
+                    <span class="plan-unit-type type-${unit.type}">${unit.type}</span>
+                    <a class="plan-unit-resource" href="${unit.resource_url}" target="_blank"
+                       onclick="event.stopPropagation()">${escHtml(unit.resource)}</a>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+      container.appendChild(weekEl);
+    });
+
+    mlUpdateProgress();
+  }
+
+  function mlToggleUnit(item, unitId) {
+    const cb = item.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+    item.classList.toggle('done', cb.checked);
+    localStorage.setItem('myedge_unit_' + unitId, cb.checked);
+    mlUpdateProgress();
+  }
+
+  function mlUpdateProgress() {
+    const allUnits = document.querySelectorAll('#ml-weeks-container .plan-unit');
+    const total = allUnits.length;
+    const done  = Array.from(allUnits).filter(u => u.classList.contains('done')).length;
+    const pct   = total ? Math.round((done / total) * 100) : 0;
+
+    const labelEl = document.getElementById('ml-progress-label');
+    const pctEl   = document.getElementById('ml-progress-pct');
+    const barEl   = document.getElementById('ml-progress-bar');
+    if (labelEl) labelEl.textContent = `${done} / ${total} tasks`;
+    if (pctEl)   pctEl.textContent   = pct + '%';
+    if (barEl)   barEl.style.width   = pct + '%';
+  }
+
+  function mlChangePlan() {
+    if (!confirm('Reset your plan? Current progress will be cleared.')) return;
+
+    // Clear all unit progress for the current plan
+    const toolKey = localStorage.getItem('myedge_ml_tool');
+    const weeks   = parseInt(localStorage.getItem('myedge_ml_weeks')) || ML_STATE.weeks;
+    const hours   = parseInt(localStorage.getItem('myedge_ml_hours')) || ML_STATE.hours;
+    if (toolKey && CURRICULA[toolKey]) {
+      generatePlan(toolKey, weeks, hours).forEach(w =>
+        w.units.forEach(u => localStorage.removeItem('myedge_unit_' + u.id))
+      );
+    }
+
+    localStorage.removeItem('myedge_ml_name');
+    localStorage.removeItem('myedge_ml_tool');
+    localStorage.removeItem('myedge_ml_weeks');
+    localStorage.removeItem('myedge_ml_hours');
+    ML_STATE = { tool: null, weeks: 6, hours: 4 };
+
+    // Reset UI to form state
+    document.getElementById('ml-plan-view').style.display = 'none';
+    document.getElementById('ml-onboard').style.display   = 'flex';
+    document.getElementById('ml-name').value = '';
+    document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.option-btn').forEach(btn => {
+      const type = btn.dataset.type;
+      const val  = parseInt(btn.dataset.val);
+      btn.classList.toggle('active',
+        (type === 'weeks' && val === 6) || (type === 'hours' && val === 4)
+      );
+    });
+  }
+
   // GAP ANSWERS
   function toggleGap(header) {
     const body = header.nextElementSibling;
