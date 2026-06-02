@@ -2339,7 +2339,7 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
     },
   };
 
-  let ML_STATE = { tool: null, weeks: 6, hours: 4 };
+  let ML_STATE = { tools: [], weeks: 6, hours: 4 };
 
   // Deterministic greedy plan engine — same inputs always produce same unit→week mapping
   function generatePlan(toolKey, weeks, hoursPerWeek) {
