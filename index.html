@@ -1212,6 +1212,15 @@
       .stat-cards { grid-template-columns: repeat(2, 1fr); }
       .form-row { flex-wrap: wrap; }
       .lp-week-foot { flex-direction: column !important; align-items: flex-start !important; }
+
+      /* My Learning mobile */
+      .tool-grid { grid-template-columns: repeat(2, 1fr); }
+      .ml-step { gap: 12px; }
+      .ml-step-num { display: none; }
+      .ml-plan-header { flex-direction: column; gap: 10px; }
+      .ml-change-btn { align-self: flex-start; }
+      .option-row { gap: 6px; }
+      .option-btn { padding: 6px 12px; font-size: 12px; }
     }
 
     @media (max-width: 480px) {
@@ -1219,6 +1228,10 @@
       .stat-cards { grid-template-columns: 1fr; }
       .main { padding: 16px 12px; }
       .section-title { font-size: 18px; }
+
+      /* My Learning narrow */
+      .tool-grid { grid-template-columns: repeat(2, 1fr); }
+      .ml-generate-btn { width: 100%; justify-content: center; }
     }
   </style>
 </head>
