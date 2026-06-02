@@ -2346,6 +2346,7 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
     const cb = item.querySelector('input[type="checkbox"]');
     cb.checked = !cb.checked;
     item.classList.toggle('done', cb.checked);
+    item.setAttribute('aria-checked', cb.checked);
     localStorage.setItem('myedge_unit_' + unitId, cb.checked);
     mlUpdateProgress();
   }
