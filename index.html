@@ -2443,10 +2443,24 @@ Example: I'm a HubSpot-native MOPs professional who bridges deep CRM architectur
 
   function mlSelectTool(key) {
     if (!CURRICULA[key] || !CURRICULA[key].available) return;
-    ML_STATE.tool = key;
-    document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('selected'));
+    const idx = ML_STATE.tools.indexOf(key);
     const btn = document.getElementById('ml-tool-' + key);
-    if (btn) btn.classList.add('selected');
+    if (idx === -1) {
+      ML_STATE.tools.push(key);
+      if (btn) btn.classList.add('selected');
+    } else {
+      ML_STATE.tools.splice(idx, 1);
+      if (btn) btn.classList.remove('selected');
+    }
+    const countEl = document.getElementById('ml-tool-count');
+    if (countEl) {
+      if (ML_STATE.tools.length > 0) {
+        countEl.textContent = ML_STATE.tools.length + ' selected';
+        countEl.style.display = 'inline';
+      } else {
+        countEl.style.display = 'none';
+      }
+    }
   }
 
   function mlSelectOption(type, val) {
